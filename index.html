@@ -6,18 +6,22 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://liquidlands.github.io/Eternals.js/eternals.js"></script>
+    <script src="https://liquidlands.github.io/Eternals.js/custom_example.js"></script>
 
     <script>
 
         // get's the eternal by id and then draws it
-        get = function () {                      
+        get = function () {
 
             $('#Status').html('fetching..');
             $("#Reference").attr('src', '');
 
             // create a new blank eternal
             let id = $('#EternalId').val(),
+                type = $('#Type').val(),
                 eternal = new Eternal();
+
+            if (type == "Custom") eternal = new CustomEternal();
 
             // clear the canvas
             eternal.draw('Canvas');
@@ -45,10 +49,11 @@
     </script>
 
     <style>
-        body{
-            font-family:monospace;
-            font-size:1.2em;
+        body {
+            font-family: monospace;
+            font-size: 1.2em;
         }
+
         code {
             text-decoration: underline;
             cursor: pointer;
@@ -63,17 +68,17 @@
             grid-gap: 10px;
         }
 
-        .sections .section {
-            width: 100%;
-            height: 100%;
-            max-width: 800px;
-            max-height: 800px;
-        }
+            .sections .section {
+                width: 100%;
+                height: 100%;
+                max-width: 800px;
+                max-height: 800px;
+            }
 
         #Canvas, #Reference {
             background-color: #eeeeee;
         }
-       
+
         #Status {
             margin-left: 20px;
             color: #777;
@@ -83,14 +88,22 @@
 </head>
 <body>
     <h1>
-        Eternal.js Tester
+        Eternals.js Tester
     </h1>
     <p>
-        This is a test page for the <a href="https://github.com/LiquidLands/Eternals.js">eternals.js library</a>. 
-        This library draws an eternal using it's blueprint.
+        This is a test page for the <a href="https://github.com/LiquidLands/Eternals.js">eternals.js library</a>.
+        This library draws an eternal using it's blueprint. Only minted eternals can be drawn.<br />
+        'Standard' draws the eternal exactly as the blueprint describes. <br />
+        'Custom' shows an example of how to draw it in a custom way.<br />
+
     </p>
     <div>
-        Eternal Id: <input id="EternalId" value="1" />
+        Eternal Id: 
+        <input id="EternalId" value="1" style="width:60px;" />
+        <select id="Type">
+            <option selected>Standard</option>
+            <option>Custom</option>
+        </select>
         <code onclick="get()">draw</code>
 
         &nbsp;
