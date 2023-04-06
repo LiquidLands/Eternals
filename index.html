@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://liquidlands.github.io/Eternals.js/eternals.js"></script>
+
+    <script>
+
+        //
+
+
+
+
+        get = function (id) {
+
+            $('#Status').html('fetching..');
+            $("#Reference").attr('src', '');
+
+            // create a new blank eternal
+            let eternal = new CustomEternal();
+            eternal.draw('Canvas');
+
+            let result = eternal.get(id, (status) => {
+
+                console.log(eternal.meta);
+                $('#Status').html(status);
+
+                // 200 means we have a blueprint
+                if (status == 200) eternal.draw('Canvas');
+
+                // 200 or 204 means we have general meta
+                if (status == 200 || status == 204) $("#Reference").attr('src', eternal.meta.image);
+            });
+
+        };
+
+
+
+
+    </script>
+
+    <style>
+        code {
+            text-decoration: underline;
+            cursor: pointer;
+            color: steelblue;
+            user-select: none;
+        }
+
+        .sections {
+            display: grid;
+            grid-template-columns: auto auto 1fr;
+            margin-top: 30px;
+            grid-gap: 10px;
+        }
+
+            .sections .section {
+                width: 100%;
+                height: 100%;
+                max-width: 800px;
+                max-height: 800px;
+            }
+
+        #Canvas {
+            background-color: #eeeeee;
+            //border-radius: 1000px;
+        }
+
+        #Reference {
+            background-color: #eeeeee;
+        }
+
+        #Status {
+            margin-left: 20px;
+            color: #777;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div>
+        Eternal Id: <input id="EternalId" value="240" />
+        <code onclick="get($('#EternalId').val())">draw</code>
+
+        &nbsp;
+        <code onclick="$('#EternalId').val(parseInt($('#EternalId').val())-1); get($('#EternalId').val())">prev</code>
+        <code onclick="$('#EternalId').val(parseInt($('#EternalId').val())+1); get($('#EternalId').val())">next</code>
+
+        <span id="Status"></span>
+    </div>
+
+    <div class="sections">
+        <div>Drawn Image</div>
+        <div>NFT Image</div>
+        <div></div>
+
+        <canvas id="Canvas" class="section" width="800" height="800"></canvas>
+        <img id="Reference" class="section" src="" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkwAIYBwAE3gG4lQAAAABJRU5ErkJggg=='" />
+    </div>
+
+</body>
+</html>
+
