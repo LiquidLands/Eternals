@@ -9,21 +9,21 @@
 
     <script>
 
-        //
-
-
-
-
-        get = function (id) {
+        // get's the eternal by id and then draws it
+        get = function () {                      
 
             $('#Status').html('fetching..');
             $("#Reference").attr('src', '');
 
             // create a new blank eternal
-            let eternal = new Eternal();
+            let id = $('#EternalId').val(),
+                eternal = new Eternal();
+
+            // clear the canvas
             eternal.draw('Canvas');
 
-            let result = eternal.get(id, (status) => {
+            // fetch it's meta
+            eternal.get(id, (status) => {
 
                 console.log(eternal.meta);
                 $('#Status').html(status);
@@ -37,12 +37,18 @@
 
         };
 
-
-
+        inc = function (amount) {
+            let id = $('#EternalId');
+            id.val(parseInt(id.val()) + amount);
+        }
 
     </script>
 
     <style>
+        body{
+            font-family:monospace;
+            font-size:1.2em;
+        }
         code {
             text-decoration: underline;
             cursor: pointer;
@@ -57,22 +63,17 @@
             grid-gap: 10px;
         }
 
-            .sections .section {
-                width: 100%;
-                height: 100%;
-                max-width: 800px;
-                max-height: 800px;
-            }
-
-        #Canvas {
-            background-color: #eeeeee;
-            //border-radius: 1000px;
+        .sections .section {
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            max-height: 800px;
         }
 
-        #Reference {
+        #Canvas, #Reference {
             background-color: #eeeeee;
         }
-
+       
         #Status {
             margin-left: 20px;
             color: #777;
@@ -81,21 +82,27 @@
 
 </head>
 <body>
-
+    <h1>
+        Eternal.js Tester
+    </h1>
+    <p>
+        This is a test page for the <a href="https://github.com/LiquidLands/Eternals.js">eternals.js library</a>. 
+        This library draws an eternal using it's blueprint.
+    </p>
     <div>
-        Eternal Id: <input id="EternalId" value="240" />
-        <code onclick="get($('#EternalId').val())">draw</code>
+        Eternal Id: <input id="EternalId" value="1" />
+        <code onclick="get()">draw</code>
 
         &nbsp;
-        <code onclick="$('#EternalId').val(parseInt($('#EternalId').val())-1); get($('#EternalId').val())">prev</code>
-        <code onclick="$('#EternalId').val(parseInt($('#EternalId').val())+1); get($('#EternalId').val())">next</code>
+        (<code onclick="inc(-1); get()">dec</code> 
+        <code onclick="inc(1);  get()">inc</code>)
 
         <span id="Status"></span>
     </div>
 
     <div class="sections">
-        <div>Drawn Image</div>
-        <div>NFT Image</div>
+        <div>Drawn Image (using meta blueprint)</div>
+        <div>Reference NFT Image (normal image)</div>
         <div></div>
 
         <canvas id="Canvas" class="section" width="800" height="800"></canvas>
