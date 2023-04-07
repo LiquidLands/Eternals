@@ -148,7 +148,7 @@ class Eternal {
         
         // if this variable is a string then we assume it's an id and we still have to get the element 
         if (typeof canvas_element_or_id === "string") {
-            canvas = document.getElementById(canvas_id);
+            canvas = document.getElementById(canvas_element_or_id);
         }
 
         let ctx = canvas.getContext('2d');

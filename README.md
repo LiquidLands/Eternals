@@ -1,14 +1,14 @@
 # Eternals.js
 
-A JavaScript library for drawing Eternals on an HTML canvas element based on a provided blueprint. Eternals are typically drawn on an 800x800 canvas and consist of different elements like background, eyes, horns, and mouth. The library can be extended and overwritten to change the visuals.
+A JavaScript library for drawing Eternals on an HTML canvas element using their blueprints. Eternals are typically drawn on an 800x800 canvas and consist of different elements like background, eyes, horns, and mouth. The library can be extended and overwritten to change the visuals.
 
 ## Fetching a Blueprint
 
-Blueprints can be retrieved using the metadata URI with ?include=blueprint appended to it, for example:
+Blueprints can be retrieved using the metadata URI with **?include=blueprint** appended to it, for example:
 
 https://pix.ls/meta/eternals/123?include=blueprint
 
-You should then cache them for later use and not retrieve them repeatedly. They will not change once an eternal has been created.
+You should then cache them for later use and not retrieve them repeatedly. They do not change.
 
 
 ## Normal Usage
