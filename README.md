@@ -46,7 +46,7 @@ eternal.get(id, (status) => {
 
 ## Draw to an off-screen canvas
 
-In this example, we create an off-screen canvas, initialize an Eternal object with the blueprint data, and then use the draw method of the Eternal object to draw the eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
+In this example, we create an off-screen canvas, initialize an Eternal object with a blueprint, and then use the draw method to draw the eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
 
 https://liquidlands.github.io/Eternals.js/offscreen_example
 
