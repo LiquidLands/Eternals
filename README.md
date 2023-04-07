@@ -8,24 +8,28 @@ https://liquidlands.github.io/Eternals.js/
 
 ## Usage
 
+```
 let eternal = new Eternal(blueprint);
 eternal.draw('Canvas');
+```
 
 ## Fetching a Blueprint
 Bluepints can be retrieved using the metadata URI with ?include=blueprint appended to it, for example:
 
 https://pix.ls/meta/eternals/123?include=blueprint
 
+```
 let eternal = new Eternal();
 eternal.get(id, (status) => {
     if (status == 200) eternal.draw('Canvas');
 });
+```
 
 ## Blueprint Object
 
 The blueprint object contains all the necessary information to draw an Eternal on a canvas. It includes details about the appearance of the Eternal's eyes, horns, mouth, and other features. Below is a breakdown of the blueprint object:
 
-```javascript
+```
 blueprint: {
     width: 800,                                     // standard eternals are currently drawn on a 800x800 canvas
     height: 800,
@@ -81,6 +85,7 @@ blueprint: {
         right3: { ... }
     }
 }
+```
 
 ### Background
 The background property contains information about the background color and bubbles that make up the Eternal's skin texture. It includes the background color, bubble color, and an array of bubbles with their center coordinates, radius, and opacity.
