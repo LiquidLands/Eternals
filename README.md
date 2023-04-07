@@ -139,6 +139,41 @@ A poly stack has the following key properties:
 The poly stack structure allows for customization and flexibility when drawing the facial features of an Eternal. For instance, by providing different sets of corner points for each polygon, various expressions can be created for the Eternal's face. Furthermore, a custom draw function can be provided to modify the rendering of the facial features as needed.
 
 
+## Advanced drawing
+
+Rather than call the main draw() function you can call each draw each part of the face individually, change stuff, etc.
+
+```javascript
+let eternal = new Eternal(blueprint),
+    ctx = eternal.init_canvas(canvas_id);
+
+// change some stuff
+eternal.blueprint.borders.size = 1;
+eternal.blueprint.background.color = '#777777';
+
+// draw each part of the eternal
+this.draw_background(ctx);
+this.draw_skin(ctx);         
+this.draw_vignette(ctx);
+this.draw_horns(ctx);
+this.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
+  if (!stack) return;
+
+  let bp = this.blueprint,
+      borders = bp.borders;
+
+  // step through each poly in the list
+  for (let poly of stack.polys) {
+
+      ctx.beginPath();
+      ctx.arc(stack.center_x, stack.center_y, poly.size / 2, 0, 2 * Math.PI);
+      ctx.fillStyle = poly.color;
+      ctx.fill();
+  }
+});
+//this.draw_mouth(ctx);                         // no mouth 
+```
+
 ## Customization
 You can extend the Eternal class and override its methods for custom rendering. For example, you can provide a custom draw function to change the rendering of specific elements such as eyes or mouth. Below is an example:
 
