@@ -141,7 +141,9 @@ The poly stack structure allows for customization and flexibility when drawing t
 
 ## Advanced drawing
 
-Rather than call the main draw() function you can call each draw each part of the face individually, change stuff, etc.
+Rather than call the main draw() function you can draw each part of the face individually, change stuff, etc.
+
+https://liquidlands.github.io/Eternals.js/advanced.html
 
 ```javascript
 let eternal = new Eternal(blueprint),
@@ -158,9 +160,6 @@ this.draw_vignette(ctx);
 this.draw_horns(ctx);
 this.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
   if (!stack) return;
-
-  let bp = this.blueprint,
-      borders = bp.borders;
 
   // step through each poly in the list
   for (let poly of stack.polys) {
