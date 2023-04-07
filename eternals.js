@@ -93,33 +93,32 @@ class Eternal {
     // this fetches the eternal blueprint from the online meta data 
     // it also stores the meta for reference but this is not used in this library currently
     get(id, callback) {
-        $.ajax({            
-             // this is the normal contract meta data URI, just append ?include=blueprint to add the blueprint to it
-            url: "https://pix.ls/meta/eternals/" + id + "?include=blueprint",   
-            type: "GET", contentType: "application/json; charset=utf-8", dataType: "json",
-            success: (meta) => {
 
-                // store meta for reference
-                console.log(meta);
-                this.meta = meta;
-
-                // return 200 if we successfully get the blueprint for this id
-                if (meta?.blueprint) {
-                    this.blueprint = meta.blueprint;
-                    callback(200);
-                    return;
+        // this is the normal contract metadata URI, just append ?include=blueprint to add the blueprint to it
+        fetch("https://pix.ls/meta/eternals/" + id + "?include=blueprint")
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    callback(response.status);                    
                 }
-
-                // return 204 if there we no blueprint in the meta
-                callback(204);
-            },
-            error: (error) => {
-                // return the error code
-                // most common is 404 'not found' when requesting an unknown id
+            })
+            .then(meta => {
+                //console.log(meta);
+                if (meta) {
+                    this.meta = meta;
+                    if (meta?.blueprint) {
+                        this.blueprint = meta.blueprint;
+                        callback(200);
+                    }
+                    else {
+                        callback(204);
+                    }
+                }
+            })
+            .catch(error => {
                 callback(error.status);
-            }
-        });
-
+            });
     }
 
     // draws a full standard eternal
