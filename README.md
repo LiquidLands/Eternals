@@ -8,6 +8,8 @@ https://liquidlands.github.io/Eternals.js/
 
 ## Usage
 
+https://liquidlands.github.io/Eternals.js/cached_example.html
+
 ```html
 <canvas id="Canvas" width="800" height="800"></canvas>
 ```
@@ -37,6 +39,8 @@ eternal.get(id, (status) => {
 ## Draw to an off-screen canvas
 
 In this example, we create an off-screen canvas, initialize an Eternal object with the blueprint data, and then use the draw method of the Eternal object to draw the eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
+
+https://liquidlands.github.io/Eternals.js/offscreen_example.html
 
 ```javascript
 let offscreen_canvas = document.createElement('canvas');
@@ -143,7 +147,7 @@ The poly stack structure allows for customization and flexibility when drawing t
 
 Rather than call the main draw() function you can draw each part of the face individually, change stuff, etc.
 
-https://liquidlands.github.io/Eternals.js/advanced.html
+https://liquidlands.github.io/Eternals.js/advanced_example.html
 
 ```javascript
 let eternal = new Eternal(blueprint),
@@ -158,21 +162,21 @@ eternal.draw_background(ctx);
 eternal.draw_skin(ctx);         
 eternal.draw_vignette(ctx);
 eternal.draw_horns(ctx);
-eternal.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
-  if (!stack) return;
+eternal.draw_eyes(ctx, function(ctx, stack) {           // a custom draw function has been provided here
+    if (!stack) return;
 
-  // step through each poly in the list
-  for (let poly of stack.polys) {
+    // step through each poly in the list
+    for (let poly of stack.polys) {
 
-      ctx.beginPath();
-      ctx.arc(stack.center_x, stack.center_y, poly.size / 2, 0, 2 * Math.PI);
-      ctx.fillStyle = poly.color;
-      ctx.fill();
-
-      ctx.lineWidth = this.blueprint.borders.size;
-      ctx.strokeStyle = this.blueprint.borders.color;
-      ctx.stroke();
-  }
+        ctx.beginPath();
+        ctx.arc(stack.center_x, stack.center_y+100, poly.size / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = poly.color;
+        ctx.fill();
+                                                        
+        ctx.lineWidth = this.blueprint.borders.size;
+        ctx.strokeStyle = this.blueprint.borders.color;
+        ctx.stroke();
+    }
 });
 //eternal.draw_mouth(ctx);                         // no mouth 
 ```
