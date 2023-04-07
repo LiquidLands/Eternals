@@ -1,28 +1,36 @@
 # Eternals.js
 
-A JavaScript library for drawing Eternals on an HTML canvas element based on a provided blueprint. Eternals are typically drawn on an 800x800 canvas and consist of different elements like background, eyes, horns, and mouth. The library can be extended and overwritten to change the drawing style, and individual draw functions (e.g., draw_eyes()) can be called with a custom_draw_function() to draw that section differently.
+A JavaScript library for drawing Eternals on an HTML canvas element based on a provided blueprint. Eternals are typically drawn on an 800x800 canvas and consist of different elements like background, eyes, horns, and mouth. The library can be extended and overwritten to change the visuals.
 
-## Example
+## Fetching a Blueprint
 
-https://liquidlands.github.io/Eternals.js/
+Blueprints can be retrieved using the metadata URI with ?include=blueprint appended to it, for example:
 
-## Usage
+https://pix.ls/meta/eternals/123?include=blueprint
+
+You should then cache them for later use and not retrieve them repeatedly. They will not change once an eternal has awoken.
+
+
+## Normal Usage
+
+Create an Eternal object using the cached blueprint.
 
 https://liquidlands.github.io/Eternals.js/cached_example.html
-
-```html
-<canvas id="Canvas" width="800" height="800"></canvas>
-```
 
 ```javascript
 let eternal = new Eternal(blueprint);
 eternal.draw('Canvas');
 ```
 
-## Fetching a Blueprint
-Blueprints can be retrieved using the metadata URI with ?include=blueprint appended to it, for example:
+```html
+<canvas id="Canvas" width="800" height="800"></canvas>
+```
 
-https://pix.ls/meta/eternals/123?include=blueprint
+## Fetching a Blueprint
+
+You can retrieve a blueprint and draw it using this library.
+
+https://liquidlands.github.io/Eternals.js/
 
 Eternal.get(id) will do this for you. It will return a standard html status code to the callback with the following typical values:
 - 200 success
