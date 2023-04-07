@@ -18,11 +18,29 @@ Blueprints can be retrieved using the metadata URI with ?include=blueprint appen
 
 https://pix.ls/meta/eternals/123?include=blueprint
 
+Eternal.get(id) will do this for you. It will return a standard html status code to the call back with the following typical values:
+- 200 success
+- 204 no blueprint in the meta
+- 404 not found (eg. if eternal not minted yet)
+
 ```javascript
 let eternal = new Eternal();
 eternal.get(id, (status) => {
     if (status == 200) eternal.draw('Canvas');
 });
+```
+
+## Draw to an off-screen canvas
+
+In this example, we create an off-screen canvas, initialize an Eternal object with the blueprint data, and then use the draw method of the Eternal object to draw the eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
+
+```javascript
+let offscreen_canvas = document.createElement('canvas');
+offscreen_canvas.width = 800;
+offscreen_canvas.height = 800;
+
+let eternal = new Eternal(blueprint);
+eternal.draw(offscreen_canvas);
 ```
 
 ## Blueprint Object
@@ -94,13 +112,27 @@ The background property contains information about the background color and bubb
 The borders property defines the style of the border lines
 
 ### Eyes
-The eyes property contains information about the appearance and position of the Eternal's eyes. It includes the count of eyes, and individual eye details such as left, middle (if applicable), and right eyes. Each eye is represented as a poly stack, which is a collection of polygons with specific attributes like size, position, and color. Additionally, a shape property is provided for alternative drawing, which contains the x and y corner points of the polygons in a scaled format.
+The eyes property contains information about the appearance and position of the Eternal's eyes. It includes the count of eyes, and individual eye details such as left, middle (if applicable), and right eyes. Each eye is represented as a poly stack, which is a collection of polygons with specific attributes like size, position, and color. Additionally, a shape property is provided for alternative drawing, which contains the x and y corner points of the polygons in a percentage scaled format.
 
 ### Horns
-The horns property describes the appearance and position of the Eternal's horns. It includes the count of horns, and individual horn details such as left and right horns. Each horn is also represented as a poly stack with attributes like size, position, and color. Similar to the eyes, a shape property is provided for alternative drawing, containing the x and y corner points of the polygons in a scaled format.
+The horns property describes the appearance and position of the Eternal's horns (if present). It includes the count of horns, and individual horn details such as left and right horns. Each horn is also represented as a poly stack with attributes like size, position, and color. Similar to the eyes, a shape property is provided for alternative drawing, containing the x and y corner points of the polygons in a percentage scaled format.
 
 ### Mouth
 The mouth property contains information about the appearance and position of the Eternal's mouth. It includes the count of mouth features, and individual mouth details such as left3, left2, left1, middle, right1, right2, and right3. Each mouth feature is represented as a poly stack with specific attributes like size, position, and color.
+
+### The Poly Stack
+A poly stack is a data structure used in the Eternals.js library to represent and draw different facial features of an Eternal, such as eyes, horns, and mouth sections. Each facial feature is composed of a stack of polygons (typically hexagons), which are drawn from largest to smallest to create the desired appearance.
+
+A poly stack has the following key properties:
+
+- **center_x** and **center_y**: These properties represent the center point at which each polygon in the stack is drawn. These can be used to draw other shapes, animate movement, build 3D models, etc. They are not needed if you are drawing directly using the polys array.
+
+- **polys**: An array containing the individual polygons in the stack. Each polygon has its own properties such as color, size, and separate arrays for x and y coordinates of its 18 points (6 corners with 3 points per corner).
+
+- **shape**: The shape defines a 100x100 polygon shape used in this stack. Eyes each have their own shape, whereas all mouth and horns used shared shapes. Shapes are not needed if you are drawing directly using the polys array, but they are useful if you want to manipulate the drawing.
+
+The poly stack structure allows for customization and flexibility when drawing the facial features of an Eternal. For instance, by providing different sets of corner points for each polygon, various expressions can be created for the Eternal's face. Furthermore, a custom draw function can be provided to modify the rendering of the facial features as needed.
+
 
 ## Customization
 You can extend the Eternal class and override its methods for custom rendering. For example, you can provide a custom draw function to change the rendering of specific elements such as eyes or mouth.

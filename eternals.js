@@ -63,8 +63,8 @@
         },    
         horns: {
             count: 0,
-            left:  { ... }                              // poly stack
-            right: { ... }                          
+            left:  { ... },                              // poly stack
+            right: { ... },                          
             shape: null
         },
         mouth: {
@@ -75,7 +75,8 @@
             middle: { ... },
             right1: { ... },
             right2: { ... },
-            right3: { ... }
+            right3: { ... },
+            shape: null
         }
     }
 */
