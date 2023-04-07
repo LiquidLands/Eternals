@@ -150,7 +150,7 @@ let eternal = new Eternal(blueprint),
     ctx = eternal.init_canvas(canvas_id);
 
 // change some stuff
-eternal.blueprint.borders.size = 2;
+eternal.blueprint.borders.size = 1;
 eternal.blueprint.background.color = '#777777';
 
 // draw each part of the eternal
@@ -168,6 +168,10 @@ eternal.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has
       ctx.arc(stack.center_x, stack.center_y, poly.size / 2, 0, 2 * Math.PI);
       ctx.fillStyle = poly.color;
       ctx.fill();
+
+      ctx.lineWidth = borders.size;
+      ctx.strokeStyle = borders.color;
+      ctx.stroke();
   }
 });
 //eternal.draw_mouth(ctx);                         // no mouth 

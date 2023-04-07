@@ -6,7 +6,6 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://liquidlands.github.io/Eternals.js/eternals.js"></script>
-    <script src="https://liquidlands.github.io/Eternals.js/custom_example.js"></script>
 
     <script>
 
@@ -18,10 +17,7 @@
 
             // create a new blank eternal
             let id = $('#EternalId').val(),
-                type = $('#Type').val(),
                 eternal = new Eternal();
-
-            if (type == "Custom") eternal = new CustomEternal();
 
             // clear the canvas
             eternal.draw('Canvas');
@@ -38,7 +34,7 @@
                     let ctx = eternal.init_canvas('Canvas');
 
                     // change some stuff
-                    eternal.blueprint.borders.size = 2;
+                    eternal.blueprint.borders.size = 1;
                     eternal.blueprint.background.color = '#777777';
 
                     // draw each part of the eternal
@@ -56,6 +52,10 @@
                             ctx.arc(stack.center_x, stack.center_y+100, poly.size / 2, 0, 2 * Math.PI);
                             ctx.fillStyle = poly.color;
                             ctx.fill();
+
+                            ctx.lineWidth = borders.size;
+                            ctx.strokeStyle = borders.color;
+                            ctx.stroke();
                         }
                     });
                     //eternal.draw_mouth(ctx);                         // no mouth
@@ -114,22 +114,16 @@
 </head>
 <body>
     <h1>
-        Eternals.js Tester
+        Eternals.js Advanced Example
     </h1>
     <p>
         This is a test page for the <a href="https://github.com/LiquidLands/Eternals.js">eternals.js library</a>.
         This library draws an eternal using it's blueprint. Only minted eternals can be drawn.<br />
-        'Standard' draws the eternal exactly as the blueprint describes. <br />
-        'Custom' shows an example of how to draw it in a custom way.<br />
 
     </p>
     <div>
         Eternal Id: 
-        <input id="EternalId" value="1" style="width:60px;" />
-        <select id="Type">
-            <option selected>Standard</option>
-            <option>Custom</option>
-        </select>
+        <input id="EternalId" value="1" style="width:60px;" />       
         <code onclick="get()">draw</code>
 
         &nbsp;
