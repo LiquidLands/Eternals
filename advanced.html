@@ -38,7 +38,7 @@
                     let ctx = eternal.init_canvas('Canvas');
 
                     // change some stuff
-                    eternal.blueprint.borders.size = 1;
+                    eternal.blueprint.borders.size = 2;
                     eternal.blueprint.background.color = '#777777';
 
                     // draw each part of the eternal
@@ -53,7 +53,7 @@
                         for (let poly of stack.polys) {
 
                             ctx.beginPath();
-                            ctx.arc(stack.center_x, stack.center_y, poly.size / 2, 0, 2 * Math.PI);
+                            ctx.arc(stack.center_x, stack.center_y+100, poly.size / 2, 0, 2 * Math.PI);
                             ctx.fillStyle = poly.color;
                             ctx.fill();
                         }

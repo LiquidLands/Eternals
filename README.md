@@ -150,7 +150,7 @@ let eternal = new Eternal(blueprint),
     ctx = eternal.init_canvas(canvas_id);
 
 // change some stuff
-eternal.blueprint.borders.size = 1;
+eternal.blueprint.borders.size = 2;
 eternal.blueprint.background.color = '#777777';
 
 // draw each part of the eternal
@@ -271,3 +271,4 @@ Using blueprints many new things can be done with Eternals. Here are some ideas:
 - Combine/merge eternals (create off-spring)
 - Create complex scenes
 - Templates for AI inputs
+- Create derivatives
