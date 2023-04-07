@@ -154,11 +154,11 @@ eternal.blueprint.borders.size = 1;
 eternal.blueprint.background.color = '#777777';
 
 // draw each part of the eternal
-this.draw_background(ctx);
-this.draw_skin(ctx);         
-this.draw_vignette(ctx);
-this.draw_horns(ctx);
-this.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
+eternal.draw_background(ctx);
+eternal.draw_skin(ctx);         
+eternal.draw_vignette(ctx);
+eternal.draw_horns(ctx);
+eternal.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
   if (!stack) return;
 
   // step through each poly in the list
@@ -170,7 +170,7 @@ this.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has be
       ctx.fill();
   }
 });
-//this.draw_mouth(ctx);                         // no mouth 
+//eternal.draw_mouth(ctx);                         // no mouth 
 ```
 
 ## Customization
@@ -260,3 +260,14 @@ It shows the following customizations:
 - Overriding the draw method: In this case, the draw_skin(ctx) line is commented out, which means that the skin will not be drawn for this custom object.
 
 - Adding custom draw functions: Two custom draw functions, sharp_polys() and round_circles(), are provided in the CustomEternal class. They can be used to draw shapes in different styles. For instance, sharp_polys() draws angular polygons with thin borders, while round_circles() draws circles with customizable border size and color. They are provided as overrides to draw eyes and mouth.
+
+## Ideas
+
+Using blueprints many new things can be done with Eternals. Here are some ideas:
+
+- Animate the faces
+- Change expressions
+- Build 3d models
+- Combine/merge eternals (create off-spring)
+- Create complex scenes
+- Templates for AI inputs

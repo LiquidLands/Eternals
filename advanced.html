@@ -42,11 +42,11 @@
                     eternal.blueprint.background.color = '#777777';
 
                     // draw each part of the eternal
-                    this.draw_background(ctx);
-                    this.draw_skin(ctx);
-                    this.draw_vignette(ctx);
-                    this.draw_horns(ctx);
-                    this.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
+                    eternal.draw_background(ctx);
+                    eternal.draw_skin(ctx);
+                    eternal.draw_vignette(ctx);
+                    eternal.draw_horns(ctx);
+                    eternal.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
                         if (!stack) return;
 
                         // step through each poly in the list
@@ -58,7 +58,7 @@
                             ctx.fill();
                         }
                     });
-                    //this.draw_mouth(ctx);                         // no mouth
+                    //eternal.draw_mouth(ctx);                         // no mouth
                 }
 
                 // 200 or 204 means we have general meta
