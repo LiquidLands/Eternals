@@ -159,7 +159,7 @@ class Eternal {
             canvas.height = 800;
             ctx.fillStyle = '#eeeeee';
             ctx.fillRect(0, 0, 800, 800);
-            return;
+            return; 
         }
 
         // set up the canvas

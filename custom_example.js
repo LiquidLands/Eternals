@@ -74,5 +74,5 @@ class CustomEternal extends Eternal {
             ctx.strokeStyle = borders.color;
             ctx.stroke();
         }
-    }
+    } 
 }

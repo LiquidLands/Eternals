@@ -35,7 +35,7 @@ https://liquidlands.github.io/Eternals.js/fetching_example
 Eternal.get(id) will do this for you. It will return a standard html status code to the callback with the following typical values:
 - 200 success
 - 204 no blueprint in the meta
-- 404 not found (eg. if eternal not minted yet)
+- 404 not found (eg. if Eternal not minted yet)
 
 ```javascript
 let eternal = new Eternal();
@@ -46,7 +46,7 @@ eternal.get(id, (status) => {
 
 ## Draw to an off-screen canvas
 
-In this example, we create an off-screen canvas, initialize an Eternal object with a blueprint, and then use the draw method to draw the eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
+In this example, we create an off-screen canvas, initialize an Eternal object with a blueprint, and then use the draw method to draw the Eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
 
 https://liquidlands.github.io/Eternals.js/offscreen_example
 
@@ -123,7 +123,7 @@ blueprint: {
         left: {                                     // poly stack (standard structure used for eyes, horns and mouth)
             center_x: 265,                          // the center point of the stack where each of it's poly's are drawn (these are only needed for custom drawing)
             center_y: 290,                          
-            polys: [                                // each poly in the stack (only x, y, color are needed to draw a standard eternal)
+            polys: [                                // each poly in the stack (only x, y, color are needed to draw a standard Eternal)
                 {
                     size: 350,                      // size is only needed if you want to draw alternative shapes
                     x: [.. 18 corner points..],     // eg [a, a, a, b, b, b, c, c, c, d, d, d, e, e, e, f, f, f]  ... 6 sets of 3 corner values each 
@@ -132,7 +132,7 @@ blueprint: {
                 },
                 { ... }
             ],
-            shape {                                 // shape details are provided but are not needed to draw a standard eternal (they are only needed for alternative drawing)
+            shape {                                 // shape details are provided but are not needed to draw a standard Eternal (they are only needed for alternative drawing)
                 x: [.. 18 corner points..],         // each poly in the stack will have the same shape
                 y: [.. 18 corner points..],         // eg [a, a, a, b, b, b, c, c, c, d, d, d, e, e, e, f, f, f]  > 6 sets of 3 corner values each (scaled to 100)
             }
@@ -208,7 +208,7 @@ class CustomEternal extends Eternal {
         // stop here if we don't have a blueprint
         if (!this.blueprint) return;
 
-        // draw each part of the eternal
+        // draw each part of the Eternal
         this.draw_background(ctx);
         //this.draw_skin(ctx);         // eg. don't draw skin
         this.draw_vignette(ctx);
@@ -284,7 +284,7 @@ Using blueprints many new things can be done with Eternals. Here are some ideas:
 - Animate the faces
 - Change expressions
 - Build 3d models
-- Combine/merge eternals (create off-spring)
+- Combine/merge Eternals (create off-spring)
 - Create complex scenes
-- Templates for AI inputs
-- Create derivatives
+- Templates/masks for AI inputs
+- Create derivatives 
