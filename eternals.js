@@ -144,13 +144,14 @@ class Eternal {
     init_canvas(canvas_element_or_id) {
 
         let bp = this.blueprint,
-            canvas = canvas_element_or_id,   
-            ctx = canvas.getContext('2d');
-
+            canvas = canvas_element_or_id;
+        
         // if this variable is a string then we assume it's an id and we still have to get the element 
         if (typeof canvas_element_or_id === "string") {
             canvas = document.getElementById(canvas_id);
         }
+
+        let ctx = canvas.getContext('2d');
 
         // check we have a blueprint
         if (!bp) {
