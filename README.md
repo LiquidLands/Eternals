@@ -8,6 +8,10 @@ https://liquidlands.github.io/Eternals.js/
 
 ## Usage
 
+```html
+<canvas id="Canvas" width="800" height="800"></canvas>
+```
+
 ```javascript
 let eternal = new Eternal(blueprint);
 eternal.draw('Canvas');
@@ -18,7 +22,7 @@ Blueprints can be retrieved using the metadata URI with ?include=blueprint appen
 
 https://pix.ls/meta/eternals/123?include=blueprint
 
-Eternal.get(id) will do this for you. It will return a standard html status code to the call back with the following typical values:
+Eternal.get(id) will do this for you. It will return a standard html status code to the callback with the following typical values:
 - 200 success
 - 204 no blueprint in the meta
 - 404 not found (eg. if eternal not minted yet)
@@ -88,8 +92,8 @@ blueprint: {
     },    
     horns: {
         count: 0,
-        left:  { ... }                              // poly stack
-        right: { ... }                          
+        left:  { ... },                             // poly stack
+        right: { ... },                          
         shape: null
     },
     mouth: {
@@ -100,7 +104,8 @@ blueprint: {
         middle: { ... },
         right1: { ... },
         right2: { ... },
-        right3: { ... }
+        right3: { ... },
+        shape: null
     }
 }
 ```
@@ -121,7 +126,7 @@ The horns property describes the appearance and position of the Eternal's horns 
 The mouth property contains information about the appearance and position of the Eternal's mouth. It includes the count of mouth features, and individual mouth details such as left3, left2, left1, middle, right1, right2, and right3. Each mouth feature is represented as a poly stack with specific attributes like size, position, and color.
 
 ### The Poly Stack
-A poly stack is a data structure used in the Eternals.js library to represent and draw different facial features of an Eternal, such as eyes, horns, and mouth sections. Each facial feature is composed of a stack of polygons (typically hexagons), which are drawn from largest to smallest to create the desired appearance.
+A poly stack represents different facial features of an Eternal, such as eyes, horns, and mouth sections. Each facial feature is composed of a stack of polygons (typically hexagons), which are drawn from largest to smallest to create the desired appearance.
 
 A poly stack has the following key properties:
 
@@ -129,10 +134,95 @@ A poly stack has the following key properties:
 
 - **polys**: An array containing the individual polygons in the stack. Each polygon has its own properties such as color, size, and separate arrays for x and y coordinates of its 18 points (6 corners with 3 points per corner).
 
-- **shape**: The shape defines a 100x100 polygon shape used in this stack. Eyes each have their own shape, whereas all mouth and horns used shared shapes. Shapes are not needed if you are drawing directly using the polys array, but they are useful if you want to manipulate the drawing.
+- **shape**: The shape defines a 100x100 polygon shape used in this stack for all it's polys. Eyes each have their own shape, whereas all mouth and horns used shared shapes. Shapes are not needed if you are drawing directly using the polys array, but they are useful if you want to manipulate the drawing.
 
 The poly stack structure allows for customization and flexibility when drawing the facial features of an Eternal. For instance, by providing different sets of corner points for each polygon, various expressions can be created for the Eternal's face. Furthermore, a custom draw function can be provided to modify the rendering of the facial features as needed.
 
 
 ## Customization
-You can extend the Eternal class and override its methods for custom rendering. For example, you can provide a custom draw function to change the rendering of specific elements such as eyes or mouth.
+You can extend the Eternal class and override its methods for custom rendering. For example, you can provide a custom draw function to change the rendering of specific elements such as eyes or mouth. Below is an example:
+
+```javascript
+class CustomEternal extends Eternal {
+
+    constructor(blueprint) {
+        super(blueprint);
+    }
+
+    // overwrite the draw function
+    draw(canvas_id) {
+
+        // init the canvas
+        let ctx = this.init_canvas(canvas_id);
+
+        // stop here if we don't have a blueprint
+        if (!this.blueprint) return;
+
+        // draw each part of the eternal
+        this.draw_background(ctx);
+        //this.draw_skin(ctx);         // eg. don't draw skin
+        this.draw_vignette(ctx);
+        this.draw_horns(ctx);
+        this.draw_eyes(ctx, this.round_circles);
+        this.draw_mouth(ctx, this.sharp_polys);
+    }
+
+    // example draw function for angular polys with a thin border
+    sharp_polys(ctx, stack) {
+        if (!stack) return;
+
+        let bp = this.blueprint,
+            borders = bp.borders,
+            polys = stack.polys;
+
+        // step through each poly in the list
+        for (let poly of polys) {
+
+            let x = poly.x,
+                y = poly.y;
+
+            // create the poly path on the canvas
+            ctx.beginPath();
+            for (let point = 0; point < 18; point += 3) {
+                if (point == 0) ctx.moveTo(x[point + 1], y[point + 1]);
+                else ctx.lineTo(x[point + 1], y[point + 1]);
+            }
+            ctx.closePath();
+
+            // draw the above poly
+            ctx.fillStyle = poly.color;
+            ctx.fill();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = borders.color;
+            ctx.stroke();
+        }
+    }
+
+    // example draw function 
+    round_circles(ctx, stack) {
+        if (!stack) return;
+
+        let bp = this.blueprint,
+            borders = bp.borders;
+
+        // step through each poly in the list
+        for (let poly of stack.polys) {
+
+            ctx.beginPath();
+            ctx.arc(stack.center_x, stack.center_y, poly.size / 2, 0, 2 * Math.PI);
+            ctx.fillStyle = poly.color;
+            ctx.fill();
+
+            ctx.lineWidth = borders.size;
+            ctx.strokeStyle = borders.color;
+            ctx.stroke();
+        }
+    }
+}
+```
+
+It shows the following customizations:
+
+- Overriding the draw method: In this case, the draw_skin(ctx) line is commented out, which means that the skin will not be drawn for this custom object.
+
+- Adding custom draw functions: Two custom draw functions, sharp_polys() and round_circles(), are provided in the CustomEternal class. They can be used to draw shapes in different styles. For instance, sharp_polys() draws angular polygons with thin borders, while round_circles() draws circles with customizable border size and color. They are provided as overrides to draw eyes and mouth.
