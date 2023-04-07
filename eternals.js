@@ -1,9 +1,91 @@
 
+/*  Eternals.js
+
+ *  This library receives or fetches an eternal blueprint and draws it to the provided canvas id
+ *  It can be extended and overwritten to change the style of drawing
+ *  Individual draw functions (eg. draw_eyes()) can be called with a custom_draw_function() to draw that section differently
+    
+ *  Standard Usage: 
+    
+    let eternal = new Eternal(blueprint);
+    eternal.draw('Canvas');
+      
+ *  Fetching a blueprint:  
+    (Can be retrieved using the meta data URI with '?include=blueprint' appended to it), eg:
+    https://pix.ls/meta/eternals/123?include=blueprint
+   
+    let eternal = new Eternal();
+    eternal.get(id, (status) => {
+        if (status == 200) eternal.draw('Canvas');
+    });
+ 
+ *  Blueprint object:  
+    (Below is an example of a blueprint)
+ 
+    blueprint:
+    {
+        width: 800,                                     // standard eternals are currently drawn on a 800x800 canvas
+        height: 800,
+        background: {
+            color: '#4872fa',                           // the background color of the image
+            bubble_color: '#f3f3f3',                    // the color of all bubbles (usually some shade of grey)
+            bubbles: [
+                [0, 0, 14.35, 0.1],                     // each bubble [center_x, center_y, radius, opacity]
+                ...
+                [38, 0, 10.92, 0.09]
+            ]
+        },
+        borders: {                                      // the style of all border lines
+            size: 8,                                    
+            color: '#222222'                            
+        },
+        eyes: {
+            count: 2,
+            left: {                                     // poly stack (standard structure used for eyes, horns and mouth)
+                center_x: 265,                          // the center point of the stack where each of it's poly's are drawn (these are only needed for custom drawing)
+                center_y: 290,                          
+                polys: [                                // each poly in the stack (only x, y, color are needed to draw a standard eternal)
+                    {
+                        size: 350,                      // size is only needed if you want to draw alternative shapes
+                        x: [.. 18 corner points..],     // eg [a, a, a, b, b, b, c, c, c, d, d, d, e, e, e, f, f, f]  ... 6 sets of 3 corner values each 
+                        y: [.. 18 corner points..],     // these are described in further detail in the code below
+                        color: '#222222'                
+                    },
+                    { ... }
+                ],
+                shape {                                 // shape details are provided but are not needed to draw a standard eternal (they are only needed for alternative drawing)
+                    x: [.. 18 corner points..],         // each poly in the stack will have the same shape
+                    y: [.. 18 corner points..],         // eg [a, a, a, b, b, b, c, c, c, d, d, d, e, e, e, f, f, f]  > 6 sets of 3 corner values each (scaled to 100)
+                }
+            }
+            middle: null,
+            right: { ... }                              // poly stack
+        },    
+        horns: {
+            count: 0,
+            left:  { ... }                              // poly stack
+            right: { ... }                          
+            shape: null
+        },
+        mouth: {
+            count: 6,
+            left3: null,                                // poly stack
+            left2: { ... },
+            left1: { ... },
+            middle: { ... },
+            right1: { ... },
+            right2: { ... },
+            right3: { ... }
+        }
+    }
+*/
 
 class Eternal {  
-    meta;
-    blueprint;
-   
+    meta;           // not used in this library currently
+    blueprint;      // everything we need
+
+    // blueprints should be cached and not fetched from pix.ls repeatedly (they don't change, and this is a lot quicker)
+    // cached blueprints can be provided to the constructor
     constructor(blueprint) {
         this.blueprint = blueprint;
     }   
@@ -43,11 +125,8 @@ class Eternal {
     // draws a full standard eternal
     draw(canvas_id) {
         
-        let canvas = document.getElementById(canvas_id),
-            ctx = canvas.getContext('2d');
-
         // init the canvas
-        this.init_canvas(canvas, ctx);
+        let ctx = this.init_canvas(canvas_id);
 
         // stop here if we don't have a blueprint
         if (!this.blueprint) return;
@@ -62,8 +141,11 @@ class Eternal {
     }
 
     // sets the canvas to the eternal size (usually 800x800)
-    init_canvas(canvas, ctx) {
-        let bp = this.blueprint;
+    init_canvas(canvas_id) {
+
+        let bp = this.blueprint,
+            canvas = document.getElementById(canvas_id),
+            ctx = canvas.getContext('2d');
 
         // check we have a blueprint
         if (!bp) {
@@ -77,6 +159,8 @@ class Eternal {
         // set up the canvas
         canvas.width = bp.width;
         canvas.height = bp.height;
+
+        return ctx;
     }
 
     // draws the background color on the provided canvas context
@@ -134,13 +218,16 @@ class Eternal {
         ctx.fillRect(0, 0, bp.width, bp.height);
     }
 
+    // horns, eyes and mouth all use poly stacks to draw their shapes
+    // they can be provided with a custom draw function to change rendering
+
     // draws horns if they exist
-    draw_horns(ctx, custom_draw_polys) {
+    draw_horns(ctx, custom_draw_function) {
         let bp = this.blueprint,
             horns = bp.horns,
 
-            // standard draw_polys() will be used unless a custom function is provided
-            draw_polys = (custom_draw_polys || this.draw_polys).bind(this);    
+            // standard draw_polys() will be used unless a custom draw function is provided
+            draw_polys = (custom_draw_function || this.draw_polys).bind(this);    
 
         // these are usually not present
         draw_polys(ctx, horns.left);
@@ -148,12 +235,12 @@ class Eternal {
     }
 
     // draws eyes
-    draw_eyes(ctx, custom_draw_polys) {
+    draw_eyes(ctx, custom_draw_function) {
         let bp = this.blueprint,
             eyes = bp.eyes,
 
-            // standard draw_polys() will be used unless a custom function is provided
-            draw_polys = (custom_draw_polys || this.draw_polys).bind(this);               
+            // standard draw_polys() will be used unless a custom draw function is provided
+            draw_polys = (custom_draw_function || this.draw_polys).bind(this);               
 
         // each of these may or may not be present depending on the type of eternal
         draw_polys(ctx, eyes.left);
@@ -162,12 +249,12 @@ class Eternal {
     }
 
     // draws mouth
-    draw_mouth(ctx, custom_draw_polys) {
+    draw_mouth(ctx, custom_draw_function) {
         let bp = this.blueprint,
             mouth = bp.mouth,
 
-            // standard draw_polys() will be used unless a custom function is provided
-            draw_polys = (custom_draw_polys || this.draw_polys).bind(this);    
+            // standard draw_polys() will be used unless a custom draw function is provided
+            draw_polys = (custom_draw_function || this.draw_polys).bind(this);    
 
         // left and right are sometimes not present
         draw_polys(ctx, mouth.left3);             // the 'most left' mouth is #3
@@ -190,20 +277,27 @@ class Eternal {
             borders = bp.borders,
             polys = stack.polys;
 
+        // stack also contains center_x & center_y which is the center point that each poly is drawn on (not used here though)
+        // this can be used to draw other shapes (eg. circles), animate movement, build 3d models, etc.
+
         // step through each poly in the list
         for (let poly of polys) {
 
-            console.log(poly);
-
-            // each poly is a hexagon
-            // it described by 18 points for it's 6 corners (3 points per corner)
+            // each poly is a hexagon with the following structure
+            // {
+            //    color: "#121212",
+            //    size: 35,
+            //    x: [..18 corner values..]
+            //    y: [..18 corner values..]
+            // }
+            // it is described by 18 points for it's 6 corners (3 points per corner)
             // x and y are provided individualy for each point using arrays of 18 values each
             // eg x = [a, a, a, b, b, b, c, c, c, d, d, d, e, e, e, f, f, f]     
             //    y = [a, a, a, b, b, b, c, c, c, d, d, d, e, e, e, f, f, f]
-
             // we provide three points for each corner so that a custom curve can provided for each corner
             // this allows each face to create a different 'expression' with these different curves
             // to build the poly we draw a quadratic curve with each of the sets of 3 points and then draw lines between them
+            // size is not used in this function but can be used to draw other shapes of the correct size
 
             let x = poly.x,
                 y = poly.y;

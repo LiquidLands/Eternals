@@ -9,11 +9,8 @@ class CustomEternal extends Eternal {
     // overwrite the draw function
     draw(canvas_id) {
 
-        let canvas = document.getElementById(canvas_id),
-            ctx = canvas.getContext('2d');
-
         // init the canvas
-        this.init_canvas(canvas, ctx);
+        let ctx = this.init_canvas(canvas_id);
 
         // stop here if we don't have a blueprint
         if (!this.blueprint) return;
