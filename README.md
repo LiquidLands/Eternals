@@ -8,14 +8,14 @@ Blueprints can be retrieved using the metadata URI with ?include=blueprint appen
 
 https://pix.ls/meta/eternals/123?include=blueprint
 
-You should then cache them for later use and not retrieve them repeatedly. They will not change once an eternal has awoken.
+You should then cache them for later use and not retrieve them repeatedly. They will not change once an eternal has been created.
 
 
 ## Normal Usage
 
 Create an Eternal object using the cached blueprint.
 
-https://liquidlands.github.io/Eternals.js/cached_example.html
+https://liquidlands.github.io/Eternals.js/cached_example
 
 ```javascript
 let eternal = new Eternal(blueprint);
@@ -30,7 +30,7 @@ eternal.draw('Canvas');
 
 You can retrieve a blueprint and draw it using this library.
 
-https://liquidlands.github.io/Eternals.js/
+https://liquidlands.github.io/Eternals.js/fetching_example
 
 Eternal.get(id) will do this for you. It will return a standard html status code to the callback with the following typical values:
 - 200 success
@@ -48,7 +48,7 @@ eternal.get(id, (status) => {
 
 In this example, we create an off-screen canvas, initialize an Eternal object with the blueprint data, and then use the draw method of the Eternal object to draw the eternal on the off-screen canvas. After that, you can use the off-screen canvas for further manipulations or draw it onto another canvas if needed.
 
-https://liquidlands.github.io/Eternals.js/offscreen_example.html
+https://liquidlands.github.io/Eternals.js/offscreen_example
 
 ```javascript
 let offscreen_canvas = document.createElement('canvas');
@@ -155,7 +155,7 @@ The poly stack structure allows for customization and flexibility when drawing t
 
 Rather than call the main draw() function you can draw each part of the face individually, change stuff, etc.
 
-https://liquidlands.github.io/Eternals.js/advanced_example.html
+https://liquidlands.github.io/Eternals.js/advanced_example
 
 ```javascript
 let eternal = new Eternal(blueprint),
