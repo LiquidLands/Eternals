@@ -169,8 +169,8 @@ eternal.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has
       ctx.fillStyle = poly.color;
       ctx.fill();
 
-      ctx.lineWidth = borders.size;
-      ctx.strokeStyle = borders.color;
+      ctx.lineWidth = this.blueprint.borders.size;
+      ctx.strokeStyle = this.blueprint.borders.color;
       ctx.stroke();
   }
 });
