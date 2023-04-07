@@ -123,10 +123,10 @@ class Eternal {
     }
 
     // draws a full standard eternal
-    draw(canvas_id) {
+    draw(canvas_element_or_id) {
         
         // init the canvas
-        let ctx = this.init_canvas(canvas_id);
+        let ctx = this.init_canvas(canvas_element_or_id);
 
         // stop here if we don't have a blueprint
         if (!this.blueprint) return;
@@ -141,11 +141,16 @@ class Eternal {
     }
 
     // sets the canvas to the eternal size (usually 800x800)
-    init_canvas(canvas_id) {
+    init_canvas(canvas_element_or_id) {
 
         let bp = this.blueprint,
-            canvas = document.getElementById(canvas_id),
+            canvas = canvas_element_or_id,   
             ctx = canvas.getContext('2d');
+
+        // if this variable is a string then we assume it's an id and we still have to get the element 
+        if (typeof canvas_element_or_id === "string") {
+            canvas = document.getElementById(canvas_id);
+        }
 
         // check we have a blueprint
         if (!bp) {

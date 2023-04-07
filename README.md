@@ -59,6 +59,44 @@ let eternal = new Eternal(blueprint);
 eternal.draw(offscreen_canvas);
 ```
 
+## Advanced drawing
+
+Rather than call the main draw() function you can draw each part of the face individually, change stuff, etc.
+
+https://liquidlands.github.io/Eternals.js/advanced_example
+
+```javascript
+let eternal = new Eternal(blueprint),
+    ctx = eternal.init_canvas(canvas_id);
+
+// change some stuff
+eternal.blueprint.borders.size = 1;
+eternal.blueprint.background.color = '#777777';
+
+// draw each part of the eternal
+eternal.draw_background(ctx);
+eternal.draw_skin(ctx);         
+eternal.draw_vignette(ctx);
+eternal.draw_horns(ctx);
+eternal.draw_eyes(ctx, function(ctx, stack) {           // a custom draw function has been provided here
+    if (!stack) return;
+
+    // step through each poly in the list
+    for (let poly of stack.polys) {
+
+        ctx.beginPath();
+        ctx.arc(stack.center_x, stack.center_y+100, poly.size / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = poly.color;
+        ctx.fill();
+                                                        
+        ctx.lineWidth = this.blueprint.borders.size;
+        ctx.strokeStyle = this.blueprint.borders.color;
+        ctx.stroke();
+    }
+});
+//eternal.draw_mouth(ctx);                         // no mouth 
+```
+
 ## Blueprint Object
 
 The blueprint object contains all the necessary information to draw an Eternal on a canvas. It includes details about the appearance of the Eternal's eyes, horns, mouth, and other features. Below is a breakdown of the blueprint object:
@@ -150,44 +188,6 @@ A poly stack has the following key properties:
 
 The poly stack structure allows for customization and flexibility when drawing the facial features of an Eternal. For instance, by providing different sets of corner points for each polygon, various expressions can be created for the Eternal's face. Furthermore, a custom draw function can be provided to modify the rendering of the facial features as needed.
 
-
-## Advanced drawing
-
-Rather than call the main draw() function you can draw each part of the face individually, change stuff, etc.
-
-https://liquidlands.github.io/Eternals.js/advanced_example
-
-```javascript
-let eternal = new Eternal(blueprint),
-    ctx = eternal.init_canvas(canvas_id);
-
-// change some stuff
-eternal.blueprint.borders.size = 1;
-eternal.blueprint.background.color = '#777777';
-
-// draw each part of the eternal
-eternal.draw_background(ctx);
-eternal.draw_skin(ctx);         
-eternal.draw_vignette(ctx);
-eternal.draw_horns(ctx);
-eternal.draw_eyes(ctx, function(ctx, stack) {           // a custom draw function has been provided here
-    if (!stack) return;
-
-    // step through each poly in the list
-    for (let poly of stack.polys) {
-
-        ctx.beginPath();
-        ctx.arc(stack.center_x, stack.center_y+100, poly.size / 2, 0, 2 * Math.PI);
-        ctx.fillStyle = poly.color;
-        ctx.fill();
-                                                        
-        ctx.lineWidth = this.blueprint.borders.size;
-        ctx.strokeStyle = this.blueprint.borders.color;
-        ctx.stroke();
-    }
-});
-//eternal.draw_mouth(ctx);                         // no mouth 
-```
 
 ## Customization
 You can extend the Eternal class and override its methods for custom rendering. For example, you can provide a custom draw function to change the rendering of specific elements such as eyes or mouth. Below is an example:

@@ -17,49 +17,44 @@
 
             // create a new blank eternal
             let id = $('#EternalId').val(),
+                type = $('#Type').val(),
                 eternal = new Eternal();
 
+            if (type == "Custom") eternal = new CustomEternal();
+
             // clear the canvas
-            eternal.draw('Canvas');
+
+            let canvas = document.getElementById('Canvas'),
+                ctx = canvas.getContext('2d');
+
+            canvas.width = 800;
+            canvas.height = 800;
+            ctx.fillStyle = '#eeeeee';
+            ctx.fillRect(0, 0, 800, 800);
+
 
             // fetch it's meta
-            eternal.get(id, (status) => {               
+            eternal.get(id, (status) => {
 
                 console.log(eternal.meta);
                 $('#Status').html(status);
 
                 // 200 means we have a blueprint
                 if (status == 200) {
-                   
-                    let ctx = eternal.init_canvas('Canvas');
+                    
+                    let offscreen_canvas = document.createElement('canvas');
+                    offscreen_canvas.width = 800;
+                    offscreen_canvas.height = 800;
 
-                    // change some stuff
-                    eternal.blueprint.borders.size = 1;
-                    eternal.blueprint.background.color = '#777777';
+                    eternal.draw(offscreen_canvas);
 
-                    // draw each part of the eternal
-                    eternal.draw_background(ctx);
-                    eternal.draw_skin(ctx);
-                    eternal.draw_vignette(ctx);
-                    eternal.draw_horns(ctx);
-                    eternal.draw_eyes(ctx, (ctx, stack) => {           // a custom draw function has been provided here
-                        if (!stack) return;
-
-                        // step through each poly in the list
-                        for (let poly of stack.polys) {
-
-                            ctx.beginPath();
-                            ctx.arc(stack.center_x, stack.center_y+100, poly.size / 2, 0, 2 * Math.PI);
-                            ctx.fillStyle = poly.color;
-                            ctx.fill();
-
-                            ctx.lineWidth = this.blueprint.borders.size;
-                            ctx.strokeStyle = this.blueprint.borders.color;
-                            ctx.stroke();
-                        }
-                    });
-                    //eternal.draw_mouth(ctx);                         // no mouth
+                    // copy
+                    ctx.globalAlpha = 0.5;
+                    ctx.drawImage(offscreen_canvas, 0, 0, 800, 800, 10, 10, 280, 280);
+                    ctx.globalAlpha = 1;
+                    ctx.drawImage(offscreen_canvas, 0, 0, 800, 800, 300, 300, 490, 490);
                 }
+
 
                 // 200 or 204 means we have general meta
                 if (status == 200 || status == 204) $("#Reference").attr('src', eternal.meta.image);
